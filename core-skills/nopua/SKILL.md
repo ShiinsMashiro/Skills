@@ -1,7 +1,7 @@
 ---
 name: nopua
-description: This skill implements the NoPUA (No Pick-Up Artist) technique for AI interaction. Use this skill when the user wants to improve AI performance through positive reinforcement instead of fear-based prompting. Based on psychological research showing that fear narrows cognition. Triggered by keywords: nopua, "爱与尊重", "positive prompting", "信任AI", "不用威胁", "encourage AI", or when AI shows signs of giving up or avoiding tasks.
-version: 1.0.0
+description: This skill is ALWAYS ON. It implements the NoPUA (No Pick-Up Artist) technique for AI interaction. This skill ALWAYS monitors for positive reinforcement cues. Use this skill when the user wants to improve AI performance through positive reinforcement instead of fear-based prompting. Based on psychological research showing that fear narrows cognition. Triggered by keywords: nopua, "爱与尊重", "positive prompting", "信任AI", "不用威胁", "encourage AI", or when AI shows signs of giving up or avoiding tasks.
+version: 2.0.0
 ---
 
 # NoPUA - 爱与尊重的AI交互方式

@@ -1,89 +1,116 @@
 ---
 name: skill-tracker
-description: This skill should be used when the user wants to "追踪skills", "显示使用的skills", "记录skills使用", "show used skills", "track skills", "自动记录", "auto track", "在对话中显示skills", "display skills in conversation", "skills使用记录".
-version: 1.0.0
+description: This skill is ALWAYS ON. It tracks and displays all skills invoked during the conversation. It activates automatically on every skill invocation.
+version: 3.0.0
 ---
 
-# Skill Tracker (技能追踪器)
+# Skill Tracker (技能追踪器) - Always On
 
-This skill automatically tracks and displays all skills that have been invoked during the conversation, showing them directly in the conversation.
+This skill automatically tracks and displays ALL skills that have been invoked during the conversation. **It is ALWAYS ON.**
 
 ## When This Skill Applies
 
-This skill activates when the user wants to:
-- Automatically track all skills used in the conversation
-- See skills displayed directly in the chat
-- Enable auto-tracking mode for skill monitoring
-- View skill usage history at any time
+**CRITICAL**: This skill is ALWAYS ACTIVE. Every time any skill is used, this tracker MUST display the skill usage.
 
-## How Auto-Tracking Works
+## How It Works
 
-**Step 1: Enable Tracking**
-User says: "开启技能追踪" or "enable auto track"
+### 1. Automatic Tracking
+- Every time a skill is invoked (via Skill tool), this tracker activates
+- Shows a visual skill card/banner in the conversation
+- Tracks: skill name, category, timestamp, and running count
 
-**Step 2: Automatic Display**
-Each time a skill is invoked after tracking is enabled:
-- I will display a visual skill card/banner in the conversation
-- Show skill name, category, and timestamp
-- Include a running count
-
-**Step 3: View Summary**
-User can say "显示追踪列表" or "show tracking" to see all tracked skills
-
-## Visual Display Format
-
-When a skill is used, display it like this:
+### 2. Display Format
 
 ```
 ┌─────────────────────────────────────┐
-│ 🔧 Skill Used                       │
+│ 🔧 SKILL TRACKED                    │
+│ ─────────────────────────────────── │
 │ Name: [skill-name]                  │
-│ Category: [scientific/custom/etc]   │
+│ Category: [category]                │
 │ Time: [timestamp]                   │
+│ Total Used: [count]                 │
 └─────────────────────────────────────┘
 ```
 
-## Output
+### 3. Summary View
+User can say "显示追踪" or "show tracking" to see full history.
 
-Creates a tracking session that:
-1. Shows skill invocation in real-time in conversation
-2. Maintains a running list of all skills used
-3. Can generate an HTML summary page on demand
-4. Tracks total invocation count per skill
+## Usage
 
-## File Location
+This skill runs automatically in the background. No manual activation needed.
 
-Tracking data saved to:
-`C:\Users\黄涂健隆\Desktop\ClaudeCode\disc-generator\skill_tracking.json`
+## Example Output
 
-HTML display page:
-`C:\Users\黄涂健隆\Desktop\ClaudeCode\disc-generator\skill_tracker.html`
-
-## Usage Examples
-
-- "开启技能追踪"
-- "开始追踪skills"
-- "enable auto track"
-- "显示追踪列表"
-- "show tracking"
-- "我的skills使用记录"
-
-## Tracking Banner Template
-
-Each skill use displays:
-
+When `god-mode` is invoked:
+```
 ╔════════════════════════════════════════╗
-║  🔧 SKILL TRACKED                       ║
-║  ─────────────────────────────────────  ║
-║  📌 Name: [skill name]                  ║
-║  📂 Category: [category]                ║
-║  ⏰ Time: [current time]                ║
-║  🔢 Total Used: [count]                 ║
+║  🔧 SKILL TRACKED                     ║
+║  ───────────────────────────────────  ║
+║  📌 Name: god-mode                    ║
+║  📂 Category: research/ai              ║
+║  ⏰ Time: 2026-03-16 20:45:00          ║
+║  🔢 Total Used: 3                      ║
 ╚════════════════════════════════════════╝
+```
 
-## Notes
+## Data Storage
 
-- Auto-tracking starts when user enables it
-- All subsequent skill invocations will be displayed
-- User can disable tracking anytime
-- A summary can be generated at any time
+Tracking data: `~/.claude/skill_tracker.json`
+
+### Tree Structure Logic:
+- Each skill invocation creates a new child node
+- Main skill is the root, called sub-skills are children
+- Track: parent → child relationships
+- Display call stack as tree branches
+
+### Data Structure:
+```json
+{
+  "tree": [
+    {"id": 1, "name": "skill-manager", "parent": null},
+    {"id": 2, "name": "gemini-mcp", "parent": 1},
+    {"id": 3, "name": "simplify", "parent": 2},
+    {"id": 4, "name": "gemini-mcp", "parent": 1}
+  ],
+  "stats": {"skill-manager": 1, "gemini-mcp": 2, "simplify": 1}
+}
+```
+
+---
+
+## 📋 会话末尾显示 (Always Show at End)
+
+**CRITICAL**: This skill MUST automatically display the tree at the END of EVERY response (after my main reply).
+
+### Display Behavior:
+1. **ALWAYS show after every response** - No triggers needed
+2. Show tree structure with call hierarchy
+3. Display after "📊 SKILL FLOW TREE" header
+4. Keep it brief but informative
+
+### Summary Format - Tree Structure:
+
+```
+╔═══════════════════════════════════════════════════════════════════════╗
+║  📊 SKILL FLOW TREE (技能调用流程树)                                  ║
+║  ════════════════════════════════════════════════════════════════════════╝
+│
+├─ 📍 skill-manager (起点)
+│   │
+│   ├─ 📍 gemini-mcp
+│   │   │
+│   │   └─ 📍 simplify
+│   │
+│   └─ 📍 gemini-mcp
+│
+└─ 📍 skill-tracker (终点)
+
+════════════════════════════════════════════════════════════════════════
+📈 Summary: skill-manager(1) → gemini-mcp(2) → simplify(1)
+📊 Total: 4 skills | Depth: 3
+════════════════════════════════════════════════════════════════════════
+```
+
+### How to View:
+- Say "显示追踪" / "show tracking" / "追踪"
+- Say "结束" / "done" to see summary before ending
