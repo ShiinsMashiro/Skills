@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python 数据科学编程 - 讨论课</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <style>
+        :root {
+            --primary: #2D5A7B;
+            --secondary: #1E3A5F;
+            --accent: #4ECDC4;
+            --warning: #FF6B6B;
+            --success: #45B7D1;
+            --bg: #0F1419;
+            --card-bg: #1A2332;
+            --text: #E8EAED;
+            --text-muted: #9AA0A6;
+            --border: #2D3748;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+        }
+
+        /* Sidebar */
+        .layout {
+            display: flex;
+            min-height: calc(100vh - 120px);
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--card-bg);
+            border-right: 1px solid var(--border);
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        .sidebar-title {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 12px 15px;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: var(--primary);
+            color: var(--text);
+        }
+
+        .nav-item.section {
+            font-weight: 500;
+            color: var(--accent);
+        }
+
+        /* Main Content */
+        .main {
+            flex: 1;
+            padding: 40px;
+            max-width: 900px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        /* Theory */
+        .theory {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 30px;
+        }
+
+        .theory h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .theory p {
+            margin-bottom: 15px;
+            color: var(--text-muted);
+        }
+
+        .theory code {
+            background: var(--bg);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9em;
+            color: var(--accent);
+        }
+
+        pre {
+            background: var(--bg);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+        }
+
+        /* Exercise */
+        .exercise {
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .exercise-header {
+            background: var(--secondary);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .exercise-number {
+            background: var(--accent);
+            color: var(--secondary);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .exercise-title {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .exercise-content {
+            padding: 20px;
+        }
+
+        .exercise-desc {
+            margin-bottom: 20px;
+            color: var(--text-muted);
+        }
+
+        /* Code Editor */
+        .editor-container {
+            background: var(--bg);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .editor-header {
+            background: #2d2d2d;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .editor-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .editor-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 6px 14px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .btn-run {
+            background: var(--accent);
+            color: var(--secondary);
+        }
+
+        .btn-run:hover {
+            background: #3dbdb5;
+        }
+
+        .btn-reset {
+            background: var(--border);
+            color: var(--text);
+        }
+
+        .editor {
+            min-height: 150px;
+            padding: 15px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            border: none;
+            resize: vertical;
+            width: 100%;
+            line-height: 1.5;
+        }
+
+        .editor:focus {
+            outline: none;
+        }
+
+        /* Output */
+        .output {
+            background: #1e1e1e;
+            padding: 15px;
+            border-top: 1px solid var(--border);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            min-height: 60px;
+            white-space: pre-wrap;
+        }
+
+        .output-success {
+            color: #4ec9b0;
+        }
+
+        .output-error {
+            color: #f48771;
+        }
+
+        /* Solution */
+        .solution {
+            margin-top: 15px;
+            border-top: 1px solid var(--border);
+            padding-top: 15px;
+        }
+
+        .solution-toggle {
+            background: none;
+            border: none;
+            color: var(--accent);
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .solution-toggle:hover {
+            text-decoration: underline;
+        }
+
+        .solution-content {
+            display: none;
+            margin-top: 15px;
+            background: var(--bg);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .solution-content.show {
+            display: block;
+        }
+
+        .solution-content pre {
+            margin: 0;
+        }
+
+        /* Learning Objectives */
+        .objectives {
+            background: rgba(78, 205, 196, 0.1);
+            border: 1px solid var(--accent);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .objectives h3 {
+            color: var(--accent);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .objectives ul {
+            list-style: none;
+        }
+
+        .objectives li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .objectives li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+            }
+
+            .main {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>Python 数据科学编程</h1>
+            <p class="subtitle">密歇根大学 · 讨论课</p>
+        </div>
+    </header>
+
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="sidebar-title">目录</div>
+            <a href="#objectives" class="nav-item">学习目标</a>
+            <a href="#basics" class="nav-item section">第一章：Python 基础</a>
+            <a href="#variables" class="nav-item">变量与数据类型</a>
+            <a href="#operators" class="nav-item">运算符</a>
+            <a href="#control" class="nav-item section">第二章：控制流</a>
+            <a href="#conditionals" class="nav-item">条件语句</a>
+            <a href="#loops" class="nav-item">循环</a>
+            <a href="#functions" class="nav-item section">第三章：函数</a>
+            <a href="#exercises" class="nav-item section">练习</a>
+            <a href="#exercise1" class="nav-item">练习 1：温度转换</a>
+            <a href="#exercise2" class="nav-item">练习 2：列表操作</a>
+            <a href="#exercise3" class="nav-item">练习 3：字典统计</a>
+        </aside>
+
+        <main class="main">
+            <!-- Learning Objectives -->
+            <section id="objectives" class="section">
+                <div class="objectives">
+                    <h3>学习目标</h3>
+                    <ul>
+                        <li>理解 Python 基础语法：变量、数据类型、运算符</li>
+                        <li>掌握条件语句和循环结构</li>
+                        <li>学会定义和调用函数</li>
+                        <li>能够编写简单的数据处理程序</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Chapter 1: Python Basics -->
+            <section id="basics" class="section">
+                <h2 class="section-title">第一章：Python 基础</h2>
+
+                <div id="variables" class="theory">
+                    <h3>变量与数据类型</h3>
+                    <p>Python 中的变量不需要声明类型，直接赋值即可：</p>
+                    <pre><code># 整数
+age = 25
+
+# 浮点数
+price = 19.99
+
+# 字符串
+name = "Python"
+
+# 布尔值
+is_active = True
+
+# 列表
+numbers = [1, 2, 3, 4, 5]
+
+# 字典
+person = {"name": "Alice", "age": 30}</code></pre>
+                </div>
+
+                <div id="operators" class="theory">
+                    <h3>运算符</h3>
+                    <p>Python 支持多种运算符：</p>
+                    <pre><code># 算术运算符
++ - * / % ** //
+
+# 比较运算符
+== != < > <= >=
+
+# 逻辑运算符
+and or not
+
+# 示例
+result = (5 + 3) * 2  # 16
+is_greater = 10 > 5   # True</code></pre>
+                </div>
+            </section>
+
+            <!-- Chapter 2: Control Flow -->
+            <section id="control" class="section">
+                <h2 class="section-title">第二章：控制流</h2>
+
+                <div id="conditionals" class="theory">
+                    <h3>条件语句</h3>
+                    <p>使用 <code>if</code>、<code>elif</code>、<code>else</code> 进行条件判断：</p>
+                    <pre><code>score = 85
+
+if score >= 90:
+    grade = "A"
+elif score >= 80:
+    grade = "B"
+elif score >= 70:
+    grade = "C"
+else:
+    grade = "D"
+
+print(f"成绩等级: {grade}")</code></pre>
+                </div>
+
+                <div id="loops" class="theory">
+                    <h3>循环</h3>
+                    <p>Python 支持 <code>for</code> 和 <code>while</code> 循环：</p>
+                    <pre><code># for 循环 - 遍历列表
+for i in range(5):
+    print(i)  # 0, 1, 2, 3, 4
+
+# for 循环 - 遍历字典
+for key, value in person.items():
+    print(f"{key}: {value}")
+
+# while 循环
+count = 0
+while count < 5:
+    print(count)
+    count += 1</code></pre>
+                </div>
+            </section>
+
+            <!-- Chapter 3: Functions -->
+            <section id="functions" class="section">
+                <h2 class="section-title">第三章：函数</h2>
+
+                <div class="theory">
+                    <h3>定义函数</h3>
+                    <p>使用 <code>def</code> 关键字定义函数：</p>
+                    <pre><code># 基本函数
+def greet(name):
+    return f"Hello, {name}!"
+
+# 带默认参数的函数
+def power(base, exponent=2):
+    return base ** exponent
+
+# 可变参数
+def sum_all(*args):
+    return sum(args)
+
+# 调用
+print(greet("Python"))           # Hello, Python!
+print(power(3))                  # 9
+print(power(2, 3))              # 8
+print(sum_all(1, 2, 3, 4, 5))  # 15</code></pre>
+                </div>
+            </section>
+
+            <!-- Exercises -->
+            <section id="exercises" class="section">
+                <h2 class="section-title">练习</h2>
+
+                <!-- Exercise 1 -->
+                <div id="exercise1" class="exercise">
+                    <div class="exercise-header">
+                        <span class="exercise-title">练习 1：温度转换</span>
+                        <span class="exercise-number">Easy</span>
+                    </div>
+                    <div class="exercise-content">
+                        <p class="exercise-desc">
+                            编写一个函数，将摄氏度转换为华氏度。公式：<br>
+                            <code>F = C × 9/5 + 32</code>
+                        </p>
+                        <div class="editor-container">
+                            <div class="editor-header">
+                                <span class="editor-title">celsius_to_fahrenheit.py</span>
+                                <div class="editor-actions">
+                                    <button class="btn btn-reset" onclick="resetEditor(1)">重置</button>
+                                    <button class="btn btn-run" onclick="runCode(1)">运行</button>
+                                </div>
+                            </div>
+                            <textarea class="editor" id="editor1"># 练习 1：温度转换
+# 请实现 celsius_to_fahrenheit 函数
+
+def celsius_to_fahrenheit(celsius):
+    # 在这里编写代码
+    pass
+
+# 测试
+print(celsius_to_fahrenheit(0))    # 应输出 32
+print(celsius_to_fahrenheit(100))  # 应输出 212
+print(celsius_to_fahrenheit(-40))  # 应输出 -40</textarea>
+                            <div class="output" id="output1">点击"运行"查看输出...</div>
+                        </div>
+                        <div class="solution">
+                            <button class="solution-toggle" onclick="toggleSolution(1)">
+                                <span>▼</span> 显示答案
+                            </button>
+                            <div class="solution-content" id="solution1">
+                                <pre><code>def celsius_to_fahrenheit(celsius):
+    return celsius * 9/5 + 32</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Exercise 2 -->
+                <div id="exercise2" class="exercise">
+                    <div class="exercise-header">
+                        <span class="exercise-title">练习 2：列表操作</span>
+                        <span class="exercise-number">Easy</span>
+                    </div>
+                    <div class="exercise-content">
+                        <p class="exercise-desc">
+                            编写一个函数，返回列表中的最大值和最小值。
+                        </p>
+                        <div class="editor-container">
+                            <div class="editor-header">
+                                <span class="editor-title">find_min_max.py</span>
+                                <div class="editor-actions">
+                                    <button class="btn btn-reset" onclick="resetEditor(2)">重置</button>
+                                    <button class="btn btn-run" onclick="runCode(2)">运行</button>
+                                </div>
+                            </div>
+                            <textarea class="editor" id="editor2"># 练习 2：列表操作
+# 请实现 find_min_max 函数，返回 (最小值, 最大值) 元组
+
+def find_min_max(numbers):
+    # 在这里编写代码
+    pass
+
+# 测试
+result = find_min_max([3, 1, 4, 1, 5, 9, 2, 6])
+print(result)  # 应输出 (1, 9)
+
+result = find_min_max([10, 20, 30])
+print(result)  # 应输出 (10, 30)</textarea>
+                            <div class="output" id="output2">点击"运行"查看输出...</div>
+                        </div>
+                        <div class="solution">
+                            <button class="solution-toggle" onclick="toggleSolution(2)">
+                                <span>▼</span> 显示答案
+                            </button>
+                            <div class="solution-content" id="solution2">
+                                <pre><code>def find_min_max(numbers):
+    return (min(numbers), max(numbers))</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Exercise 3 -->
+                <div id="exercise3" class="exercise">
+                    <div class="exercise-header">
+                        <span class="exercise-title">练习 3：字典统计</span>
+                        <span class="exercise-number">Medium</span>
+                    </div>
+                    <div class="exercise-content">
+                        <p class="exercise-desc">
+                            编写一个函数，统计字符串中每个字符出现的次数。
+                        </p>
+                        <div class="editor-container">
+                            <div class="editor-header">
+                                <span class="editor-title">count_chars.py</span>
+                                <div class="editor-actions">
+                                    <button class="btn btn-reset" onclick="resetEditor(3)">重置</button>
+                                    <button class="btn btn-run" onclick="runCode(3)">运行</button>
+                                </div>
+                            </div>
+                            <textarea class="editor" id="editor3"># 练习 3：字典统计
+# 请实现 count_characters 函数，返回字符计数字典
+
+def count_characters(text):
+    # 在这里编写代码
+    pass
+
+# 测试
+result = count_characters("hello")
+print(result)  # 应输出 {'h': 1, 'e': 1, 'l': 2, 'o': 1}
+
+result = count_characters("python")
+print(result)  # 应输出 {'p': 1, 'y': 1, 't': 1, 'h': 1, 'o': 1, 'n': 1}</textarea>
+                            <div class="output" id="output3">点击"运行"查看输出...</div>
+                        </div>
+                        <div class="solution">
+                            <button class="solution-toggle" onclick="toggleSolution(3)">
+                                <span>▼</span> 显示答案
+                            </button>
+                            <div class="solution-content" id="solution3">
+                                <pre><code>def count_characters(text):
+    result = {}
+    for char in text:
+        result[char] = result.get(char, 0) + 1
+    return result</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Exercise 4 -->
+                <div id="exercise4" class="exercise">
+                    <div class="exercise-header">
+                        <span class="exercise-title">练习 4：过滤偶数</span>
+                        <span class="exercise-number">Medium</span>
+                    </div>
+                    <div class="exercise-content">
+                        <p class="exercise-desc">
+                            编写一个函数，过滤列表中的偶数，只保留奇数。
+                        </p>
+                        <div class="editor-container">
+                            <div class="editor-header">
+                                <span class="editor-title">filter_odd.py</span>
+                                <div class="editor-actions">
+                                    <button class="btn btn-reset" onclick="resetEditor(4)">重置</button>
+                                    <button class="btn btn-run" onclick="runCode(4)">运行</button>
+                                </div>
+                            </div>
+                            <textarea class="editor" id="editor4"># 练习 4：过滤偶数
+# 请实现 filter_odds 函数，返回只包含奇数的列表
+
+def filter_odds(numbers):
+    # 在这里编写代码
+    pass
+
+# 测试
+result = filter_odds([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+print(result)  # 应输出 [1, 3, 5, 7, 9]
+
+result = filter_odds([2, 4, 6])
+print(result)  # 应输出 []
+
+result = filter_odds([1, 3, 5])
+print(result)  # 应输出 [1, 3, 5]</textarea>
+                            <div class="output" id="output4">点击"运行"查看输出...</div>
+                        </div>
+                        <div class="solution">
+                            <button class="solution-toggle" onclick="toggleSolution(4)">
+                                <span>▼</span> 显示答案
+                            </button>
+                            <div class="solution-content" id="solution4">
+                                <pre><code>def filter_odds(numbers):
+    return [n for n in numbers if n % 2 != 0]</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script>
+        // Reset editor
+        const originalCode = {
+            1: `# 练习 1：温度转换
+# 请实现 celsius_to_fahrenheit 函数
+
+def celsius_to_fahrenheit(celsius):
+    # 在这里编写代码
+    pass
+
+# 测试
+print(celsius_to_fahrenheit(0))    # 应输出 32
+print(celsius_to_fahrenheit(100))  # 应输出 212
+print(celsius_to_fahrenheit(-40))  # 应输出 -40`,
+            2: `# 练习 2：列表操作
+# 请实现 find_min_max 函数，返回 (最小值, 最大值) 元组
+
+def find_min_max(numbers):
+    # 在这里编写代码
+    pass
+
+# 测试
+result = find_min_max([3, 1, 4, 1, 5, 9, 2, 6])
+print(result)  # 应输出 (1, 9)
+
+result = find_min_max([10, 20, 30])
+print(result)  # 应输出 (10, 30)`,
+            3: `# 练习 3：字典统计
+# 请实现 count_characters 函数，返回字符计数字典
+
+def count_characters(text):
+    # 在这里编写代码
+    pass
+
+# 测试
+result = count_characters("hello")
+print(result)  # 应输出 {'h': 1, 'e': 1, 'l': 2, 'o': 1}
+
+result = count_characters("python")
+print(result)  # 应输出 {'p': 1, 'y': 1, 't': 1, 'h': 1, 'o': 1, 'n': 1}`,
+            4: `# 练习 4：过滤偶数
+# 请实现 filter_odds 函数，返回只包含奇数的列表
+
+def filter_odds(numbers):
+    # 在这里编写代码
+    pass
+
+# 测试
+result = filter_odds([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+print(result)  # 应输出 [1, 3, 5, 7, 9]
+
+result = filter_odds([2, 4, 6])
+print(result)  # 应输出 []
+
+result = filter_odds([1, 3, 5])
+print(result)  # 应输出 [1, 3, 5]`
+        };
+
+        function resetEditor(num) {
+            document.getElementById('editor' + num).value = originalCode[num];
+            document.getElementById('output' + num).textContent = '点击"运行"查看输出...';
+            document.getElementById('output' + num).className = 'output';
+        }
+
+        function toggleSolution(num) {
+            const content = document.getElementById('solution' + num);
+            const btn = content.previousElementSibling;
+            if (content.classList.contains('show')) {
+                content.classList.remove('show');
+                btn.innerHTML = '<span>▼</span> 显示答案';
+            } else {
+                content.classList.add('show');
+                btn.innerHTML = '<span>▲</span> 隐藏答案';
+            }
+        }
+
+        function runCode(num) {
+            const code = document.getElementById('editor' + num).value;
+            const output = document.getElementById('output' + num);
+
+            // Simulate Python execution with JavaScript
+            try {
+                // Create a safe evaluation environment
+                let result = [];
+
+                // Override print to capture output
+                const prints = [];
+                const print = (...args) => {
+                    prints.push(args.map(a => JSON.stringify(a)).join(' '));
+                };
+
+                // Execute in a limited scope
+                const safeEval = new Function('print', code);
+                safeEval(print);
+
+                if (prints.length > 0) {
+                    output.textContent = prints.join('\n');
+                    output.className = 'output output-success';
+                } else {
+                    output.textContent = '代码执行完成（无输出）';
+                    output.className = 'output';
+                }
+            } catch (e) {
+                output.textContent = '错误: ' + e.message;
+                output.className = 'output output-error';
+            }
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', e => {
+                e.preventDefault();
+                const target = document.querySelector(item.getAttribute('href'));
+                target.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>

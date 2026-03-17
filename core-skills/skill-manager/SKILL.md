@@ -85,6 +85,11 @@ DISPATCH_MAP = {
   "写代码": gitnexus-assistant,
   "测试": auto-test,
   "保存": auto-commit,
+  "转文字": video-transcript,
+  "文稿": video-transcript,
+  "字幕": video-transcript,
+  "学习页面": disc-generator,
+  "练习": disc-generator,
   ...
 }
 ```
