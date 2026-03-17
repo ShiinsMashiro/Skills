@@ -22,6 +22,11 @@ DISPATCH_MAP = {
   "研究": god-mode,
   "优化": simplify,
   "写代码": gitnexus-assistant,
+  "保存": auto-commit,
+  "提交": auto-commit,
+  "commit": auto-commit,
+  "push": auto-commit,
+  "代码": auto-commit,
   ...
 }
 ```
