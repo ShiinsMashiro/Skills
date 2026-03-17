@@ -4,7 +4,7 @@ description: |
   技能调度器 - 遵循 s02 原理：加一个工具，只加一个 handler。
   动态 dispatch map，按需注册技能。
   所有 188 个技能的调度中心。
-version: 2.0.0
+version: 2.1.0
 ---
 
 # Skill Manager (技能管理器)
@@ -12,6 +12,16 @@ version: 2.0.0
 **遵循 s02 原理：加一个工具，只加一个 handler**
 
 > *"加一个工具, 只加一个 handler"*
+
+## 常驻技能
+
+**这些技能在任何对话中都激活：**
+
+| 技能 | 说明 |
+|------|------|
+| `nopua` | 每次交互都用爱与尊重 |
+| `skill-tracker` | 每次响应都显示调用流程 |
+| `prompt-optimizer` | 优化用户输入 |
 
 ## 核心原理
 
