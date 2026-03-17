@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P1: Python编程基础入门 - 讨论课</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2D5A7B;
+            --secondary: #1E3A5F;
+            --accent: #4ECDC4;
+            --warning: #FF6B6B;
+            --success: #45B7D1;
+            --bg: #0F1419;
+            --card-bg: #1A2332;
+            --text: #E8EAED;
+            --text-muted: #9AA0A6;
+            --border: #2D3748;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            padding: 40px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+        }
+
+        /* Layout */
+        .layout {
+            display: flex;
+            min-height: calc(100vh - 120px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--card-bg);
+            border-right: 1px solid var(--border);
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            height: calc(100vh - 120px);
+            overflow-y: auto;
+        }
+
+        .sidebar-title {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 12px 15px;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: var(--primary);
+            color: var(--text);
+        }
+
+        /* Main Content */
+        .main {
+            flex: 1;
+            padding: 40px;
+            max-width: 900px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        /* Video Transcript Card */
+        .transcript-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .timestamp {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--accent);
+            background: rgba(78, 205, 196, 0.1);
+            padding: 4px 10px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .transcript-text {
+            color: var(--text);
+            line-height: 1.8;
+        }
+
+        /* Key Points */
+        .key-points {
+            background: rgba(78, 205, 196, 0.1);
+            border: 1px solid var(--accent);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .key-points h3 {
+            color: var(--accent);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .key-point {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .key-point:last-child {
+            margin-bottom: 0;
+        }
+
+        .key-number {
+            width: 32px;
+            height: 32px;
+            background: var(--accent);
+            color: var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .key-content h4 {
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .key-content p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Exercise */
+        .exercise {
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .exercise-header {
+            background: var(--secondary);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .exercise-number {
+            background: var(--accent);
+            color: var(--secondary);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .exercise-title {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .exercise-content {
+            padding: 20px;
+        }
+
+        .exercise-desc {
+            margin-bottom: 20px;
+            color: var(--text-muted);
+        }
+
+        .editor-container {
+            background: var(--bg);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .editor-header {
+            background: #2d2d2d;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .editor-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .editor-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 6px 14px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .btn-run {
+            background: var(--accent);
+            color: var(--secondary);
+        }
+
+        .btn-run:hover {
+            background: #3dbdb5;
+        }
+
+        .btn-reset {
+            background: var(--border);
+            color: var(--text);
+        }
+
+        .editor {
+            min-height: 150px;
+            padding: 15px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            border: none;
+            resize: vertical;
+            width: 100%;
+            line-height: 1.5;
+        }
+
+        .editor:focus {
+            outline: none;
+        }
+
+        .output {
+            background: #1e1e1e;
+            padding: 15px;
+            border-top: 1px solid var(--border);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            min-height: 60px;
+        }
+
+        .output-success {
+            color: #4ec9b0;
+        }
+
+        .output-error {
+            color: #f48771;
+        }
+
+        .solution {
+            margin-top: 15px;
+            border-top: 1px solid var(--border);
+            padding-top: 15px;
+        }
+
+        .solution-toggle {
+            background: none;
+            border: none;
+            color: var(--accent);
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .solution-toggle:hover {
+            text-decoration: underline;
+        }
+
+        .solution-content {
+            display: none;
+            margin-top: 15px;
+            background: var(--bg);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .solution-content.show {
+            display: block;
+        }
+
+        .solution-content pre {
+            margin: 0;
+        }
+
+        /* Vocabulary */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .vocab-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .vocab-term {
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .vocab-def {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+            }
+
+            .main {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>P1: Python编程基础入门</h1>
+        <p class="subtitle">密歇根大学 · Python 数据科学编程</p>
+    </header>
+
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="sidebar-title">目录</div>
+            <a href="#overview" class="nav-item">课程概述</a>
+            <a href="#keypoints" class="nav-item">核心要点</a>
+            <a href="#transcript" class="nav-item">视频文稿</a>
+            <a href="#vocabulary" class="nav-item">专业词汇</a>
+            <a href="#exercises" class="nav-item">练习</a>
+        </aside>
+
+        <main class="main">
+            <!-- Overview -->
+            <section id="overview" class="section">
+                <h2 class="section-title">课程概述</h2>
+                <div class="transcript-card">
+                    <p>本课程来自密歇根大学（University of Michigan），由 Duke University 的教授讲授。课程涵盖：</p>
+                    <ul style="margin-top: 15px; margin-left: 20px; color: var(--text-muted);">
+                        <li>Python 编程基础</li>
+                        <li>数据处理与分析</li>
+                        <li>NumPy、Pandas 库的使用</li>
+                        <li>真实世界数据处理</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Key Points -->
+            <section id="keypoints" class="section">
+                <h2 class="section-title">核心要点</h2>
+                <div class="key-points">
+                    <h3>数据科学的关键能力</h3>
+
+                    <div class="key-point">
+                        <div class="key-number">1</div>
+                        <div class="key-content">
+                            <h4>编程能力</h4>
+                            <p>掌握 Python 编程，能够编写、测试和调试程序</p>
+                        </div>
+                    </div>
+
+                    <div class="key-point">
+                        <div class="key-number">2</div>
+                        <div class="key-content">
+                            <h4>数据操作</h4>
+                            <p>加载、操作各种格式的数据，包括经济调查和 MRI 等</p>
+                        </div>
+                    </div>
+
+                    <div class="key-point">
+                        <div class="key-number">3</div>
+                        <div class="key-content">
+                            <h4>数据可视化</h4>
+                            <p>总结、绘图和建模数据</p>
+                        </div>
+                    </div>
+
+                    <div class="key-point">
+                        <div class="key-number">4</div>
+                        <div class="key-content">
+                            <h4>数学基础</h4>
+                            <p>理解统计和机器学习模型背后的数学原理</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="key-points">
+                    <h3>七步编程法</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 15px;">本课程将教你如何使用七步方法分解编程问题：</p>
+                    <ol style="color: var(--text-muted); margin-left: 20px;">
+                        <li>理解问题</li>
+                        <li>分析输入输出</li>
+                        <li>设计算法</li>
+                        <li>编写伪代码</li>
+                        <li>翻译为 Python 代码</li>
+                        <li>测试程序</li>
+                        <li>调试和优化</li>
+                    </ol>
+                </div>
+            </section>
+
+            <!-- Transcript -->
+            <section id="transcript" class="section">
+                <h2 class="section-title">视频文稿</h2>
+
+                <div class="transcript-card">
+                    <span class="timestamp">0:00 - 0:06</span>
+                    <p class="transcript-text">Hi, We are faculty members at Duke University and we are excited to teach you programming fundamentals for data science.</p>
+                    <p style="margin-top: 10px; color: var(--text-muted);">嗨，我们是杜克大学的教员，很高兴能教你数据科学编程基础。</p>
+                </div>
+
+                <div class="transcript-card">
+                    <span class="timestamp">0:15 - 0:27</span>
+                    <p class="transcript-text">In this course and later courses we will provide you with a robust understanding of not just how to program well in Python but also how to work with real data including everything from economic surveys to MRIs.</p>
+                    <p style="margin-top: 10px; color: var(--text-muted);">在本课程及后续课程中，我们将帮助你深入理解如何用 Python 编程，以及如何处理真实数据，包括经济调查和 MRI 等。</p>
+                </div>
+
+                <div class="transcript-card">
+                    <span class="timestamp">0:27 - 0:40</span>
+                    <p class="transcript-text">By the time you finish these courses you will not only be able to write test and debug Python programs but also load and manipulate data in a range of formats and summarize plot and model your data.</p>
+                    <p style="margin-top: 10px; color: var(--text-muted);">完成这些课程后，你不仅能够编写、测试和调试 Python 程序，还能加载和操作各种格式的数据，并对数据进行汇总、绘图和建模。</p>
+                </div>
+
+                <div class="transcript-card">
+                    <span class="timestamp">1:19 - 1:35</span>
+                    <p class="transcript-text">That's means that while taking these courses won't make you a data scientist on their own, we've promised that by the end of this specialization even students with zero prior programming experience will feel empowered to take on real world data manipulation challenges.</p>
+                    <p style="margin-top: 10px; color: var(--text-muted);">这意味着，虽然学习这些课程本身不会让你成为数据科学家，但我们承诺，即使是没有编程经验的学生，在完成这门专业课程后也会有能力应对真实世界的数据处理挑战。</p>
+                </div>
+
+                <div class="transcript-card">
+                    <span class="timestamp">2:08 - 2:12</span>
+                    <p class="transcript-text">Let's dive in and learn some data science.</p>
+                    <p style="margin-top: 10px; color: var(--text-muted);">让我们开始学习数据科学吧！</p>
+                </div>
+            </section>
+
+            <!-- Vocabulary -->
+            <section id="vocabulary" class="section">
+                <h2 class="section-title">专业词汇</h2>
+                <div class="vocab-grid">
+                    <div class="vocab-card">
+                        <div class="vocab-term">Data Science</div>
+                        <div class="vocab-def">数据科学 - 从数据中提取知识和洞察的跨学科领域</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-term">Algorithm</div>
+                        <div class="vocab-def">算法 - 解决问题的步骤和方法</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-term">Debug</div>
+                        <div class="vocab-def">调试 - 查找和修复程序错误</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-term">NumPy</div>
+                        <div class="vocab-def">Python 科学计算基础库</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-term">Pandas</div>
+                        <div class="vocab-def">Python 数据分析库</div>
+                    </div>
+                    <div class="vocab-card">
+                        <div class="vocab-term">Data Manipulation</div>
+                        <div class="vocab-def">数据操作 - 数据的清洗、转换和分析</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Exercises -->
+            <section id="exercises" class="section">
+                <h2 class="section-title">练习</h2>
+
+                <!-- Exercise 1 -->
+                <div class="exercise">
+                    <div class="exercise-header">
+                        <span class="exercise-title">练习 1：自我介绍</span>
+                        <span class="exercise-number">Easy</span>
+                    </div>
+                    <div class="exercise-content">
+                        <p class="exercise-desc">编写一个 Python 程序，用变量存储你的名字和年龄，然后打印出来。</p>
+                        <div class="editor-container">
+                            <div class="editor-header">
+                                <span class="editor-title">intro.py</span>
+                                <div class="editor-actions">
+                                    <button class="btn btn-reset" onclick="resetEditor(1)">重置</button>
+                                    <button class="btn btn-run" onclick="runCode(1)">运行</button>
+                                </div>
+                            </div>
+                            <textarea class="editor" id="editor1"># 练习 1：自我介绍
+# 定义变量并打印
+
+# 在这里编写代码
+name = "Your Name"
+age = 20
+
+print(f"My name is {name}")
+print(f"I am {age} years old")</textarea>
+                            <div class="output" id="output1">点击"运行"查看输出...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Exercise 2 -->
+                <div class="exercise">
+                    <div class="exercise-header">
+                        <span class="exercise-title">练习 2：数据类型</span>
+                        <span class="exercise-number">Easy</span>
+                    </div>
+                    <div class="exercise-content">
+                        <p class="exercise-desc">创建不同类型的变量（整数、浮点数、字符串、布尔值），并打印它们的类型。</p>
+                        <div class="editor-container">
+                            <div class="editor-header">
+                                <span class="editor-title">datatypes.py</span>
+                                <div class="editor-actions">
+                                    <button class="btn btn-reset" onclick="resetEditor(2)">重置</button>
+                                    <button class="btn btn-run" onclick="runCode(2)">运行</button>
+                                </div>
+                            </div>
+                            <textarea class="editor" id="editor2"># 练习 2：数据类型
+# 创建不同类型的变量并打印类型
+
+# 在这里编写代码
+my_int = 25
+my_float = 19.99
+my_string = "Python"
+my_bool = True
+
+print(f"Integer: {my_int}, Type: {type(my_int)}")
+print(f"Float: {my_float}, Type: {type(my_float)}")
+print(f"String: {my_string}, Type: {type(my_string)}")
+print(f"Boolean: {my_bool}, Type: {type(my_bool)}")</textarea>
+                            <div class="output" id="output2">点击"运行"查看输出...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Exercise 3 -->
+                <div class="exercise">
+                    <div class="exercise-header">
+                        <span class="exercise-title">练习 3：数据科学七步法</span>
+                        <span class="exercise-number">Medium</span>
+                    </div>
+                    <div class="exercise-content">
+                        <p class="exercise-desc">创建一个函数，模拟七步编程法的各个步骤。函数接收一个"问题"字符串，返回每个步骤的说明。</p>
+                        <div class="editor-container">
+                            <div class="editor-header">
+                                <span class="editor-title">seven_steps.py</span>
+                                <div class="editor-actions">
+                                    <button class="btn btn-reset" onclick="resetEditor(3)">重置</button>
+                                    <button class="btn btn-run" onclick="runCode(3)">运行</button>
+                                </div>
+                            </div>
+                            <textarea class="editor" id="editor3"># 练习 3：七步编程法
+# 实现一个函数，展示七步编程法
+
+def seven_steps(problem):
+    steps = [
+        "1. 理解问题",
+        "2. 分析输入输出",
+        "3. 设计算法",
+        "4. 编写伪代码",
+        "5. 翻译为Python代码",
+        "6. 测试程序",
+        "7. 调试和优化"
+    ]
+
+    print(f"问题: {problem}")
+    print("七步编程法:")
+    for step in steps:
+        print(f"  {step}")
+
+    return steps
+
+# 测试
+seven_steps("计算平均值")</textarea>
+                            <div class="output" id="output3">点击"运行"查看输出...</div>
+                        </div>
+                        <div class="solution">
+                            <button class="solution-toggle" onclick="toggleSolution(3)">
+                                <span>▼</span> 显示答案
+                            </button>
+                            <div class="solution-content" id="solution3">
+                                <pre><code>def seven_steps(problem):
+    steps = [
+        "1. 理解问题",
+        "2. 分析输入输出",
+        "3. 设计算法",
+        "4. 编写伪代码",
+        "5. 翻译为Python代码",
+        "6. 测试程序",
+        "7. 调试和优化"
+    ]
+
+    print(f"问题: {problem}")
+    print("七步编程法:")
+    for step in steps:
+        print(f"  {step}")
+
+    return steps</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const originalCode = {
+            1: `# 练习 1：自我介绍
+# 定义变量并打印
+
+# 在这里编写代码
+name = "Your Name"
+age = 20
+
+print(f"My name is {name}")
+print(f"I am {age} years old")`,
+            2: `# 练习 2：数据类型
+# 创建不同类型的变量并打印类型
+
+# 在这里编写代码
+my_int = 25
+my_float = 19.99
+my_string = "Python"
+my_bool = True
+
+print(f"Integer: {my_int}, Type: {type(my_int)}")
+print(f"Float: {my_float}, Type: {type(my_float)}")
+print(f"String: {my_string}, Type: {type(my_string)}")
+print(f"Boolean: {my_bool}, Type: {type(my_bool)}")`,
+            3: `# 练习 3：七步编程法
+# 实现一个函数，展示七步编程法
+
+def seven_steps(problem):
+    steps = [
+        "1. 理解问题",
+        "2. 分析输入输出",
+        "3. 设计算法",
+        "4. 编写伪代码",
+        "5. 翻译为Python代码",
+        "6. 测试程序",
+        "7. 调试和优化"
+    ]
+
+    print(f"问题: {problem}")
+    print("七步编程法:")
+    for step in steps:
+        print(f"  {step}")
+
+    return steps
+
+# 测试
+seven_steps("计算平均值")`
+        };
+
+        function resetEditor(num) {
+            document.getElementById('editor' + num).value = originalCode[num];
+            document.getElementById('output' + num).textContent = '点击"运行"查看输出...';
+            document.getElementById('output' + num).className = 'output';
+        }
+
+        function toggleSolution(num) {
+            const content = document.getElementById('solution' + num);
+            const btn = content.previousElementSibling;
+            if (content.classList.contains('show')) {
+                content.classList.remove('show');
+                btn.innerHTML = '<span>▼</span> 显示答案';
+            } else {
+                content.classList.add('show');
+                btn.innerHTML = '<span>▲</span> 隐藏答案';
+            }
+        }
+
+        function runCode(num) {
+            const code = document.getElementById('editor' + num).value;
+            const output = document.getElementById('output' + num);
+
+            try {
+                const prints = [];
+                const print = (...args) => {
+                    prints.push(args.map(a => String(a)).join(' '));
+                };
+
+                const safeEval = new Function('print', code);
+                safeEval(print);
+
+                if (prints.length > 0) {
+                    output.textContent = prints.join('\n');
+                    output.className = 'output output-success';
+                } else {
+                    output.textContent = '代码执行完成（无输出）';
+                    output.className = 'output';
+                }
+            } catch (e) {
+                output.textContent = '错误: ' + e.message;
+                output.className = 'output output-error';
+            }
+        }
+    </script>
+</body>
+</html>
