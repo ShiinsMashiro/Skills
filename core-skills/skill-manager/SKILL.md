@@ -46,6 +46,11 @@ DISPATCH_MAP = {
   "分析": scheduler,
   "优化方向": scheduler,
   "查看会议记录": scheduler,
+  "运行": auto-runner,
+  "执行": auto-runner,
+  "跑": auto-runner,
+  "安装": auto-runner,
+  "启动": auto-runner,
   ...
 }
 ```
