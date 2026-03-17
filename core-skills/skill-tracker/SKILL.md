@@ -56,6 +56,10 @@ USER: "查最新AI论文"
 | "保存" | **auto-commit** 自动提交推送 |
 | "提交" | **auto-commit** 自动提交推送 |
 | "push" | **auto-commit** 自动推送到远程 |
+| "开会" | **scheduler** 定时会议系统 |
+| "早会" | **scheduler** 每日站会 |
+| "周会" | **scheduler** 周计划会议 |
+| "复盘" | **scheduler** 任务复盘 |
 
 ---
 

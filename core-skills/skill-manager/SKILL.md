@@ -27,6 +27,12 @@ DISPATCH_MAP = {
   "commit": auto-commit,
   "push": auto-commit,
   "代码": auto-commit,
+  "开会": scheduler,
+  "会议": scheduler,
+  "早会": scheduler,
+  "周会": scheduler,
+  "复盘": scheduler,
+  "定时": scheduler,
   ...
 }
 ```
