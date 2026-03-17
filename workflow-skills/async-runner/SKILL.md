@@ -1,146 +1,97 @@
 ---
 name: async-runner
-description: This skill should be used when the user wants to "异步执行", "后台运行", "定时任务", "schedule", "background task", "cron job", "延迟执行", "async", "run in background", "定时", or wants to execute commands asynchronously or schedule tasks using Claude's config directory.
-version: 1.0.0
+description: |
+  异步执行器 - 遵循 s08 原理：慢操作丢后台，agent 继续想下一步。
+  后台线程跑命令，完成后注入通知。
+version: 2.0.0
 ---
 
 # Async Runner (异步执行器)
 
-这是一个异步任务执行器，可以在后台运行命令、定时执行任务、延迟执行。
+**遵循 s08 原理：慢操作丢后台**
 
-## When This Skill Applies
+> *"慢操作丢后台, agent 继续想下一步"*
 
-This skill activates when the user wants to:
-- Run commands in background (异步后台运行)
-- Schedule tasks to run later (定时执行)
-- Execute long-running tasks without blocking (长时间任务)
-- Set up cron-like scheduled tasks (定时任务)
-- Run multiple tasks in parallel (并行执行)
+## 核心原理
 
-## Features
-
-### 1. 后台运行 (Background Execution)
-```bash
-# 在后台运行Python脚本
-run python script.py
-
-# 后台运行并实时输出
-run --watch python app.py
-```
-
-### 2. 定时执行 (Scheduled Execution)
-```bash
-# 5分钟后执行
-delay 5m python backup.py
-
-# 每天下午3点执行
-schedule 15:00 python daily_report.py
-```
-
-### 3. 定时任务 (Cron-like)
-```bash
-# 每小时执行
-cron 0 * * * python hourly_task.py
-
-# 每天凌晨2点
-cron 0 2 * * python nightly_backup.py
-```
-
-### 4. 并行执行 (Parallel Execution)
-```bash
-# 并行运行多个任务
-parallel python task1.py && python task2.py && python task3.py
-```
-
-## Configuration
-
-任务配置存储在:
-`C:\Users\黄涂健隆\Desktop\ClaudeCode\disc-generator\async_tasks\`
+### s08: 后台不阻塞
 
 ```
-async_tasks/
-├── config.json          # 全局配置
-├── tasks/              # 任务脚本
-│   ├── backup.py
-│   ├── report.py
-│   └── monitor.py
-├── schedules/          # 定时任务配置
-│   ├── hourly.json
-│   └── daily.json
-└── logs/               # 执行日志
-    └── task_*.log
-```
+传统方式 (错):
+  1. 执行命令 (等 10 分钟)
+  2. 阻塞
+  3. 完成才能继续
 
-## Task Configuration Format
-
-```json
-{
-  "name": "backup_task",
-  "command": "python backup.py",
-  "schedule": "0 2 * * *",
-  "enabled": true,
-  "timeout": 3600,
-  "notify_on_complete": true
-}
-```
-
-## Usage Examples
-
-### 简单后台运行
-```
-User: "在后台运行这个Python脚本"
-Bot: 启动后台进程，返回PID
-```
-
-### 延迟执行
-```
-User: "10分钟后提醒我开会"
-Bot: 设置定时器，10分钟后发送提醒
-```
-
-### 定时任务
-```
-User: "每天早上9点执行数据同步"
-Bot: 创建定时任务配置
-```
-
-### 查看运行中的任务
-```
-User: "显示正在运行的任务"
-Bot: 列出所有后台进程
-```
-
-## Commands
-
-| Command | Description |
-|---------|-------------|
-| `run <command>` | 后台运行命令 |
-| `run --watch <command>` | 后台运行并监控输出 |
-| `delay <time> <command>` | 延迟执行 |
-| `schedule <time> <command>` | 定时执行 |
-| `cron <schedule> <command>` | Cron定时任务 |
-| `tasks` | 列出所有任务 |
-| `kill <task_id>` | 停止任务 |
-| `logs <task_id>` | 查看任务日志 |
-
-## Time Format
-
-| Format | Example | Description |
-|--------|---------|-------------|
-| `5m` | 5分钟后 | 分钟 |
-| `1h` | 1小时后 | 小时 |
-| `14:00` | 今天14:00 | 具体时间 |
-| `tomorrow 9:00` | 明天9点 | 明天 |
-
-## Integration with Claude Code
-
-使用 `run_in_background` 参数执行：
-```python
-# 在后台运行
-run_in_background=True
-# 命令会在后台执行，不阻塞主对话
+正确方式 (对):
+  1. 后台执行命令
+  2. agent 继续想下一步
+  3. 完成后注入通知
 ```
 
 ---
 
-*This skill enables asynchronous task execution and scheduling capabilities.*
+## 执行模式
+
+### 1. 前台 (阻塞)
+
+```python
+result = run("python train.py")  # 等完成
+# 10分钟后...
+```
+
+### 2. 后台 (非阻塞)
+
+```python
+run_in_background("python train.py")  # 立即返回
+# agent 继续下一步
+# 完成时注入通知
+```
+
+---
+
+## 任务类型
+
+| 类型 | 说明 | 例子 |
+|------|------|------|
+| **fire-and-forget** | 丢后台不管 | 启动服务 |
+| **delayed** | 延迟执行 | 10分钟后提醒 |
+| **scheduled** | 定时执行 | 每天9点 |
+| **cron** | Cron 任务 | 每小时备份 |
+
+---
+
+## 通知机制
+
+当后台任务完成时：
+
+```python
+# 自动注入到当前对话
+{
+  "type": "tool_result",
+  "content": "✅ 后台任务完成: train.py\n结果: 准确率 95%"
+}
+```
+
+---
+
+## 命令
+
+| 命令 | 功能 |
+|------|------|
+| `run <cmd>` | 后台运行 |
+| `delay <time> <cmd>` | 延迟执行 |
+| `schedule <time> <cmd>` | 定时执行 |
+| `cron <expr> <cmd>` | Cron 任务 |
+| `tasks` | 查看任务 |
+
+---
+
+## 设计原则 (来自 s08)
+
+- **丢后台**: 慢操作不阻塞
+- **继续下一步**: agent 不等待
+- **通知注入**: 完成后反馈
+
+---
+
+*This skill follows s08: 慢操作丢后台, agent 继续想下一步.*

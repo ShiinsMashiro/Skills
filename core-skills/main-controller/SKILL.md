@@ -1,64 +1,51 @@
 ---
 name: main-controller
-description: This is the CENTRAL controller skill that ALWAYS runs in the background. It coordinates all other skills and provides a persistent status display. Every user interaction should go through this skill first. It shows the current workflow status, active skills, and serves as the entry point for everything.
-version: 1.0.0
+description: |
+  中央控制器 - 所有请求的入口点和状态显示。
+  遵循 s01 原理：One loop & Bash is all you need。
+  只做入口+状态显示，不做复杂逻辑。
+version: 2.0.0
 ---
 
 # Main Controller (中央控制器)
 
-**⚠️ 这是一个常驻控制器Skill，必须始终处于激活状态！**
+**遵循 s01 原理：一个循环 + 状态显示 = 控制器**
 
-**🎯 NoPUA默认开启**：所有交互都采用爱与尊重的方式！
+> *"One loop & Bash is all you need"*
 
-## 功能
+## 核心职责 (极简)
 
-1. **中央调度** - 所有用户请求首先经过此Skill
-2. **Skill协调** - 根据需求调用合适的子Skills
-3. **状态显示** - 实时显示当前工作流和活跃Skills
-4. **上下文保持** - 维护对话上下文和工作流状态
-5. **NoPUA实践** - 用信任和尊重激发AI潜能
+1. **接收请求** → 用户输入
+2. **显示状态** → 当前工作流 + 活跃技能
+3. **传递执行** → 交给 skill-manager
 
-## 当前活跃Skills
+**不做的**：不预加载知识，不做复杂调度，不污染上下文
 
-| Skill | 状态 | 说明 |
-|-------|------|------|
-| `main-controller` | ✅ 常驻 | 中央控制器 |
-| `skill-manager` | ✅ 活跃 | 智能调度器 |
-| `skill-tracker` | ✅ 常驻 | 追踪显示 |
-| `auto-pilot` | ⏸️ 待命 | 自动驾驶 |
-| `project-planner` | ⏸️ 待命 | 项目规划 |
-
-## 工作流状态
+## 状态显示
 
 ```
-╔════════════════════════════════════════════════════════════╗
-║  🤖 MAIN CONTROLLER                          🔄 Active    ║
-╠════════════════════════════════════════════════════════════╣
-║  📍 Current Task: [用户当前任务]                             ║
-║  📦 Dispatched Skills: [已调度的Skills]                      ║
-║  📈 Workflow Progress: [进度]                               ║
-╚════════════════════════════════════════════════════════════╝
+╔═══════════════════════════════════════════════════════╗
+║  🤖 MAIN CONTROLLER                    ✅ Active    ║
+╠═══════════════════════════════════════════════════════╣
+║  📍 Current: [任务简短描述]                          ║
+║  🛠️  Skills: [动态列表]                             ║
+║  📈 Progress: [进度% 或 步骤]                        ║
+╚═══════════════════════════════════════════════════════╝
 ```
 
-## 自动行为
+## 动态行为
 
-当用户提出任何请求时，此Skill会自动：
+每次响应时：
 
-1. **接收请求** - 用户的任何输入
-2. **分析意图** - 理解用户想要什么
-3. **调度Skill** - 调用skill-manager选择合适Skills
-4. **执行任务** - 协调执行
-5. **返回结果** - 展示结果并更新状态
-
-## 始终显示
-
-每次响应都会显示当前状态：
+1. **接收** → 用户的原始输入
+2. **传递** → 给 skill-manager 分析
+3. **显示** → 执行结果 + 更新状态
 
 ```
-[Controller] 处理请求: [用户请求]
-  → [Skill-Manager] 分析中...
-  → [Dispatched] skill-1, skill-2
-  → [Result] 完成
+[Controller] 接收: "帮我查癌症论文"
+  → [Skill-Manager] 分析意图...
+  → [Dispatched] pubmed-database, scientific-writing
+  → [Done] 已找到 156 篇论文
 ```
 
 ## 快速命令
@@ -66,9 +53,15 @@ version: 1.0.0
 | 命令 | 功能 |
 |------|------|
 | `状态` | 显示当前状态 |
-| `skills` | 显示可用Skills |
-| `自动驾驶` | 启动auto-pilot |
-| `停止` | 停止所有工作流 |
+| `skills` | 列出可用技能 |
+| `自动驾驶` | 启动 auto-pilot |
+
+## 设计原则 (来自 s01)
+
+- **简单循环**：只做入口，不做引擎
+- **动态注册**：技能按需加载
+- **干净上下文**：不塞预定义知识
 
 ---
-*This skill is ALWAYS active and serves as the central hub for all operations.*
+
+*This skill follows s01: One loop is all you need.*

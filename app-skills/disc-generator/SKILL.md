@@ -1,73 +1,68 @@
 ---
 name: disc-generator
-description: This skill should be used when the user asks to "生成讨论课页面", "生成学习网页", "生成类似cs61a的页面", "生成练习页面", "create a discussion page", "create a practice page", or wants to generate an interactive learning webpage similar to CS61A discussion materials.
-version: 1.0.0
+description: |
+  讨论课页面生成器 - 生成 CS61A 风格的学习网页。
+  交互式练习、Monaco Editor 代码编辑器、可折叠解答。
+version: 2.0.0
 ---
 
-# Discussion Page Generator (讨论课页面生成器)
+# Disc Generator (学习页面生成器)
 
-This skill generates interactive learning webpages similar to CS61A discussion sections. When the user provides a learning topic, it will automatically generate a complete HTML page with:
-- Structured chapter/section organization
-- Concept explanations
-- Programming exercises with editable code editors (Monaco Editor)
-- Solutions with collapsible sections
-- Learning objectives
+**生成交互式学习网页，类似 CS61A 讨论课**
 
-## When This Skill Applies
+## 核心功能
 
-This skill activates when the user wants to:
-- Generate a study/practice webpage for a specific topic
-- Create interactive coding exercises
-- Build a discussion-style learning page
-- Get an HTML page similar to cs61a.org/disc/ format
+### 1. 输入
 
-## Input Format
-
-When invoking this skill, provide:
-- **topic**: The learning topic (e.g., "Python Functions", "Recursion", "Stack Data Structure")
-- **level** (optional): Difficulty level - beginner, intermediate, or advanced
-- **num_exercises** (optional): Number of exercises to generate (default: 4-6)
-
-The page structure follows this hybrid design:
-- **Theory Section**: Similar to https://www.composingprograms.com/ - comprehensive explanations with examples
-- **Practice Section**: Similar to https://cs61a.org/disc/sol-disc01/ - interactive exercises with code editors
-
-Example invocation:
-```
-topic: "队列(Queue)"
-level: "intermediate"
-num_exercises: 5
+```python
+{
+  "topic": "递归 (Recursion)",
+  "level": "intermediate",
+  "num_exercises": 5
+}
 ```
 
-## Output
+### 2. 输出
 
-The skill generates a complete, self-contained HTML file that includes:
-1. **Header** - Topic title and navigation
-2. **Learning Objectives** - What users will learn
-3. **Concept Explanation** - Theory and background
-4. **Exercises** - Multiple programming problems with:
-   - Problem description
-   - Editable Monaco Editor for user code
-   - Collapsible solution
-   - Test cases (doctests)
-5. **Optional: Environment Diagrams** - For applicable topics like functions/recursion
-6. **Footer** - Navigation and references
+生成完整的 HTML 页面：
+- 章节组织结构
+- 概念讲解
+- 编程练习 (Monaco Editor)
+- 可折叠解答
+- 学习目标
 
-## HTML Features
+---
 
-The generated HTML includes:
-- Monaco Editor integration for Python code editing
-- Syntax highlighting
-- Collapsible answer sections
-- Responsive sidebar navigation
-- Smooth scroll navigation
-- Clean academic-style design
+## 工作流
 
-## Usage
+```
+1. 接收主题
+       ↓
+2. 生成概念讲解
+       ↓
+3. 生成练习题
+       ↓
+4. 生成测试用例
+       ↓
+5. 打包 HTML
+```
 
-Simply tell me what topic you want to learn, for example:
-- "帮我生成一个学习'递归'的讨论课页面"
-- "生成一个Python函数练习页面"
-- "Create a discussion page for Stack data structure"
+---
 
-I will generate a complete HTML file that you can open in your browser to practice.
+## 使用
+
+```
+"帮我生成一个学习'递归'的页面"
+"生成 Python 函数练习页面"
+```
+
+---
+
+## 设计原则
+
+- **s02**: 一个 skill 专注一件事
+- **按需**: 只生成用户需要的内容
+
+---
+
+*专注生成交互式学习页面.*
