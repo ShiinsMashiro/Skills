@@ -33,6 +33,9 @@ DISPATCH_MAP = {
   "周会": scheduler,
   "复盘": scheduler,
   "定时": scheduler,
+  "分析": scheduler,
+  "优化方向": scheduler,
+  "查看会议记录": scheduler,
   ...
 }
 ```
