@@ -4,6 +4,65 @@
 
 ---
 
+## Claude Code 插件安装 (必须)
+
+当前电脑安装了以下插件，需要在新电脑上重新安装：
+
+### 已安装的插件列表
+
+| 插件名称 | 版本 | 功能 |
+|----------|------|------|
+| **claude-hud** | 0.0.10 | HUD状态栏显示 |
+| **skill-manager** | 1.0.0 | 技能调度器插件 |
+| **skills-library** | 1.0.0 | 技能库插件 |
+
+### 安装插件
+
+Claude Code 使用 `/plugins` 命令管理插件：
+
+```bash
+# 1. 启动 Claude Code
+claude
+
+# 2. 添加插件市场 (如果需要)
+/plugins marketplace add claude-hud jarrodwatts/claude-hud
+/plugins marketplace add official anthropics/claude-plugins-official
+
+# 3. 安装 claude-hud (HUD状态栏)
+/plugins install claude-hud
+
+# 4. 安装 skill-manager
+/plugins install skill-manager
+
+# 5. 安装 skills-library
+/plugins install skills-library
+
+# 6. 查看已安装插件
+/plugins list
+```
+
+### 插件来源
+
+| 插件 | GitHub 仓库 |
+|------|-------------|
+| claude-hud | jarrodwatts/claude-hud |
+| skill-manager | (本地安装) |
+| skills-library | (本地安装) |
+| 官方插件 | anthropics/claude-plugins-official |
+
+### 插件配置
+
+安装后可能需要配置 `settings.json`：
+
+```bash
+# 编辑配置
+claude config edit
+```
+
+添加插件相关配置（如果有）。
+
+---
+
 ## 需要安装的内容
 
 ### 1. Claude Code 本体 (必须)
@@ -14,9 +73,13 @@ npm install -g @anthropic-ai/claude-code
 
 ### 2. Skills 技能库 (必须)
 
+Skills 仓库包含技能的知识文档，建议也克隆：
+
 ```bash
 git clone https://github.com/ShiinsMashiro/Skills.git ~/.claude/skills
 ```
+
+### 3. 具体技能列表
 
 ### 3. 具体技能列表
 
