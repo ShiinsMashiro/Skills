@@ -1,6 +1,8 @@
 # Skills - Claude Code 技能集合
 
-让 Claude Code 从零到拥有完整技能系统的配置指南。
+Claude Code 的技能知识库，涵盖科研、编程、量子计算等多个领域。
+
+> ⚠️ **状态**: `skillsDir` 和 `autoSkills` 是 Claude Code 实验性功能，尚未发布。当前可作为**知识库参考**使用。
 
 ## 目录
 
@@ -73,22 +75,25 @@ mkdir -p ~/.claude/skills
 git clone https://github.com/ShiinsMashiro/Skills.git ~/.claude/skills
 ```
 
-### 3. 配置 settings.json
+### 3. 配置 settings.json (可选)
 
-编辑 `~/.claude/settings.json`:
+> ⚠️ **注意**: `skillsDir` 和 `autoSkills` 是实验性功能，当前版本可能不支持。
+
+编辑 `~/.claude/settings.json`：
 
 ```json
 {
   "permissions": {
     "allow": ["*"],
     "automatic": true
-  },
-  "skillsDir": "~/.claude/skills",
-  "skills": {
-    "autoEnable": true
   }
 }
 ```
+
+**说明**:
+- `skillsDir` 和 `skills.autoEnable` 是未来版本功能，当前 Claude Code 不支持这些字段会导致验证失败
+- Skills 仓库中的 `SKILL.md` 文件可作为**参考模板**使用
+- 核心功能（如 skill-manager, skill-tracker）的调度逻辑可在代码中直接调用
 
 ---
 
@@ -235,41 +240,28 @@ claude config edit
   "permissions": {
     "allow": ["*"],
     "automatic": true
-  },
-  "skillsDir": "~/.claude/skills",
-  "autoSkills": {
-    "enabled": true,
-    "tracker": true,
-    "manager": true
   }
 }
 ```
 
+> ⚠️ `skillsDir` 和 `autoSkills` 是实验性功能，当前版本不支持，不要添加。
+
 ### Step 4: 验证安装
 
 ```bash
-# 查看技能列表
-claude skills list
-
-# 测试 skill-manager
-claude "测试技能调度"
-
-# 测试 skill-tracker
-claude "显示技能追踪"
+# Skills 作为知识库使用
+# 克隆后直接参考 SKILL.md 中的内容
+claude "我需要做蛋白质结构预测"
+# → 参考 alphafold-database/SKILL.md 中的知识
 ```
 
-### Step 5: 个性化配置
-
-根据需要修改 `settings.json`:
+### Step 5: 个性化配置 (可选)
 
 ```json
 {
-  "skillsDir": "~/.claude/skills",
-  "autoSkills": {
-    "enabled": true,
-    "tracker": true,
-    "manager": true,
-    "nopua": true
+  "permissions": {
+    "allow": ["*"],
+    "automatic": true
   },
   "permissionLevel": 3
 }
@@ -277,41 +269,40 @@ claude "显示技能追踪"
 
 ---
 
-## 技能调用方式
+## 技能使用方式
 
-### 自动调用
+> ⚠️ **当前状态**: Claude Code 实验性功能（skillsDir/autoSkills）尚未发布，以下是当前可用的使用方式。
 
-根据上下文自动触发（skill-manager）:
+### 作为知识库参考
 
-```
-用户: "帮我规划这个项目"
-     ↓
-skill-manager 分析关键词: "规划"
-     ↓
-自动调度: project-planner
-```
+Skills 仓库中的 `SKILL.md` 文件包含丰富的知识：
 
-### 手动调用
+```bash
+# 克隆后直接参考
+git clone https://github.com/ShiinsMashiro/Skills.git ~/.claude/skills
 
-使用斜杠命令:
-
-```
-/skill-manager
-/skill-tracker
-/auto-pilot
-/parallel-worker
-/project-planner
+# 当你需要某个功能时，查阅对应的 SKILL.md
+cat ~/.claude/skills/alphafold-database/SKILL.md
+cat ~/.claude/skills/biopython/SKILL.md
 ```
 
-### 在代码中调用
+### 手动查阅
 
-```javascript
-// skill-manager.js
-const { dispatch } = require('./skill-manager');
+| 需求 | 查看 |
+|------|------|
+| 蛋白质结构 | `alphafold-database/SKILL.md` |
+| 基因分析 | `biopython/SKILL.md` |
+| 量子计算 | `qiskit/SKILL.md` |
+| 论文搜索 | `pubmed-database/SKILL.md` |
 
-dispatch("研究", "深度学习最新进展");
-// 自动调度: god-mode + parallel-worker
-```
+### 未来支持
+
+当 Claude Code 支持 `skillsDir` 后，这些技能将支持：
+- 自动根据上下文触发
+- 斜杠命令调用 (`/skill-name`)
+- 自动调度 (skill-manager)
+
+**关注更新**: https://github.com/ShiinsMashiro/Skills
 
 ---
 
