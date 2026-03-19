@@ -1,9 +1,10 @@
 ---
 name: skill-tracker
 description: |
-  技能追踪器 - 每次响应末尾显示技能调用流程。
-  **常驻技能** - 任何对话都显示调用流程。
-version: 4.0.0
+  技能追踪器 - 每次响应末尾显示真实技能调用流程。
+  **常驻技能** - 任何对话都显示调用链。
+  **实时追踪** - 从 /tmp/skill_call_stack.json 读取实际数据。
+version: 5.0.0
 ---
 
 # Skill Flow (技能追踪器)
@@ -12,66 +13,50 @@ version: 4.0.0
 
 ## 核心功能
 
-### 每次响应后自动显示
+### 实时调用链显示
 
 ```
-📊 SKILL FLOW
+📊 SKILL FLOW (实时追踪)
 
-USER: "查最新AI论文"
-
-💖 nopua
-   │
-▼
-🎯 prompt-optimizer
-   │
-▼
-🤖 main-controller
-   │
-▼
-🎯 skill-manager
-   │
-▼
-⚡ parallel-worker ← 检测 "或" = 并行执行
-   │
-   ├─ 🔬 深入了解论文
-   │     │
-   │     ▼
-   │     📄 返回摘要
-   │
-   └─ 💾 保存到知识库
-         │
-         ▼
-         ✅ 已保存
-   │
-▼
-
-✅ 返回完整结果
-```
-
-### 简单对话也显示
-
-```
-📊 SKILL FLOW
-
-USER: "你好"
-
-💖 nopua
-   │
-▼
-
-✅ 你好！有什么我可以帮你的？
+从日志文件读取实际技能调用：
+/tmp/skill_call_stack.json
 ```
 
 ---
 
-## 常驻模式
+## 使用方法
 
-| 特点 | 说明 |
-|------|------|
-| **任何对话** | 每次响应都显示流程 |
-| **无遗漏** | 即使简单问候也显示 |
-| **自动** | 不需要手动触发 |
-| **统一格式** | 所有对话一致显示 |
+### 自动显示（每次响应后）
+
+每次 Claude 响应后，skill-tracker 会：
+1. 读取 skill_call_stack.json
+2. 解析技能调用栈
+3. 输出实时调用链
+
+### 手动查看
+
+```
+skill-flow
+```
+
+---
+
+## 实际调用链示例
+
+```
+🌳 SKILL FLOW ●
+
+├── ⬇️ auto-pilot
+│   └── ⬇️ skill-manager
+│       └── ⬇️ god-mode
+│           └── ⬇️ parallel-worker
+│               ├── ⬇️ claude
+│               └── ⬇️ gemini
+│
+└── 💖 nopua (always-on)
+    ├── ⬇️ skill-tracker (tracking)
+    └── ✅ Plugin Active
+```
 
 ---
 
@@ -79,21 +64,10 @@ USER: "你好"
 
 | 检测到 | 动作 |
 |--------|------|
-| "和" | 并行执行多个任务 |
-| "或" | **自动并行执行所有选项** |
-| "同时" | 并行执行 |
-| "后台" | 异步执行 |
-| "代码" | **auto-commit** 自动提交推送 |
-| "保存" | **auto-commit** 自动提交推送 |
-| "提交" | **auto-commit** 自动提交推送 |
-| "push" | **auto-commit** 自动推送到远程 |
-| "开会" | **scheduler** 后台调度+留痕 |
-| "早会" | **scheduler** 每日站会 |
-| "周会" | **scheduler** 周计划会议 |
-| "复盘" | **scheduler** 任务复盘 |
-| "分析" | **scheduler** 触发分析 |
-| "优化方向" | **scheduler** 重新规划 |
+| "auto" | 启动 auto-pilot 并记录 |
+| "研究" | 启动 god-mode 并记录 |
+| "并行" | 启动 parallel-worker 并记录 |
 
 ---
 
-*常驻显示技能流程，任何对话都清晰可见！*
+*常驻显示技能流程，基于实际调用日志！*
