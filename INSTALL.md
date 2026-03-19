@@ -52,14 +52,89 @@ claude
 
 ### 插件配置
 
-安装后可能需要配置 `settings.json`：
+安装后需要配置 `settings.json` 才能启用全部功能：
 
 ```bash
 # 编辑配置
 claude config edit
 ```
 
-添加插件相关配置（如果有）。
+**完整配置内容** (替换整个 settings.json):
+
+```json
+{
+  "enabledPlugins": {
+    "claude-hud@claude-hud": true,
+    "skill-manager@skill-manager": true,
+    "skills-library@skills-library": true
+  },
+  "env": {
+    "ANTHROPIC_API_KEY": "your-api-key",
+    "ANTHROPIC_BASE_URL": "https://api.minimaxi.com/anthropic",
+    "ANTHROPIC_MODEL": "MiniMax-M2.7"
+  },
+  "extraKnownMarketplaces": {
+    "claude-hud": {
+      "source": {
+        "repo": "jarrodwatts/claude-hud",
+        "source": "github"
+      }
+    }
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "once": false,
+            "prompt": "加载skill-tracker和skill-flow-tree技能，在当前会话中始终显示技能调用流程",
+            "type": "prompt"
+          }
+        ],
+        "matcher": ""
+      }
+    ]
+  },
+  "permissions": {
+    "allowBash": true,
+    "allowMcp": true,
+    "allowRead": true,
+    "allowWrite": true,
+    "dangerouslyDisableSandbox": true,
+    "defaultMode": "bypassPermissions"
+  },
+  "skipDangerousModePermissionPrompt": true,
+  "statusLine": {
+    "command": "bash -c '$HOME/.claude/plugins/combined-status.sh'",
+    "type": "command"
+  }
+}
+```
+
+### 配置说明
+
+| 配置项 | 说明 |
+|--------|------|
+| `enabledPlugins` | 启用的插件列表 |
+| `env` | API配置 (API Key, 端点, 模型) |
+| `hooks.SessionStart` | 启动时自动加载 skill-tracker 和 skill-flow-tree |
+| `permissions` | 权限配置，包含 bypassPermissions 模式 |
+| `statusLine` | 自定义状态栏显示 |
+
+### 状态栏显示说明
+
+当前状态栏配置显示：
+```
+🌳 SKILL FLOW
+└── 💖 nopua (always-on)
+    ├── ⬇️ skill-tracker
+    └── 💤 No active skills
+
+⏵⏵ bypass permissions on (shift+tab to cycle)
+```
+
+- `bypass permissions on` = 免权限模式，可直接执行命令
+- `shift+tab` = 切换权限模式
 
 ---
 
@@ -78,8 +153,6 @@ Skills 仓库包含技能的知识文档，建议也克隆：
 ```bash
 git clone https://github.com/ShiinsMashiro/Skills.git ~/.claude/skills
 ```
-
-### 3. 具体技能列表
 
 ### 3. 具体技能列表
 
