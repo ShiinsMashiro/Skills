@@ -4,18 +4,80 @@
 
 ---
 
-## 当前环境说明
+## 需要安装的内容
 
-当前 Claude Code 拥有以下核心组件：
+### 1. Claude Code 本体 (必须)
 
-| 组件 | 说明 | 仓库位置 |
-|------|------|----------|
-| skill-manager | 技能调度器 | core-skills/skill-manager |
-| skill-tracker | 技能追踪器 | core-skills/skill-tracker |
-| nopua | 常驻技能 | core-skills/nopua |
-| auto-pilot | 自动驾驶 | workflow-skills/auto-pilot |
-| parallel-worker | 并行处理器 | workflow-skills/parallel-worker |
-| 其他188个技能 | 各领域知识 | 各个子目录 |
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+### 2. Skills 技能库 (必须)
+
+```bash
+git clone https://github.com/ShiinsMashiro/Skills.git ~/.claude/skills
+```
+
+### 3. 具体技能列表
+
+Skills 仓库包含以下技能，克隆后自动包含：
+
+#### 核心技能 (core-skills) - 必须
+
+| 技能目录 | 功能 | 说明 |
+|----------|------|------|
+| `skill-manager/` | 技能调度器 | 根据关键词自动调度技能 |
+| `skill-tracker/` | 技能追踪器 | 显示调用链 |
+| `nopua/` | 常驻技能 | 每次对话激活 |
+| `main-controller/` | 中央控制器 | 请求入口点 |
+| `skill-loader/` | 技能加载器 | 按需加载 |
+| `skill-flow-tree/` | 流程树 | 显示调用关系 |
+| `gemini-compile/` | Gemini整合器 | 格式化输出 |
+
+#### 工作流技能 (workflow-skills) - 推荐
+
+| 技能目录 | 功能 |
+|----------|------|
+| `auto-pilot/` | 自动规划执行路径 |
+| `parallel-worker/` | 多任务并行处理 |
+| `async-runner/` | 异步后台执行 |
+| `project-planner/` | 项目规划 |
+| `scheduler/` | 智能调度 |
+| `auto-runner/` | 自动执行命令 |
+| `auto-commit/` | 自动Git提交 |
+| `auto-confirm/` | 自动确认 |
+
+#### 科研技能 (claudecode-skills) - 按需
+
+**共 178 个技能，覆盖以下领域：**
+
+| 领域 | 技能数量 | 示例 |
+|------|----------|------|
+| 生物信息 | 30+ | biopython, alphafold-database, uniprot-database |
+| 化学/药物 | 20+ | rdkit, pubchem-database, chembl-database |
+| 量子计算 | 10+ | qiskit, pennylane, cirq |
+| 医学研究 | 30+ | pubmed-database, clinvar-database, gwas-database |
+| AI/ML | 30+ | transformers, pytorch, scikit-learn |
+| 统计分析 | 15+ | statsmodels, scikit-learn, polars |
+| 可视化 | 15+ | matplotlib, plotly, seaborn |
+| 基因组学 | 20+ | biopython, gget, ensembl-database |
+| 天文学 | 5+ | astropy |
+| 量子化学 | 5+ | rdkit, qutip |
+
+#### 应用技能 (app-skills)
+
+| 技能目录 | 功能 |
+|----------|------|
+| `disc-generator/` | CS61A风格学习网页生成 |
+| `god-mode/` | 超级研究工作流 |
+| `project-ideas/` | 项目灵感生成 |
+
+#### 项目集成 (project-integrations)
+
+| 技能目录 | 功能 |
+|----------|------|
+| `obsidian-vision/` | Obsidian集成 |
+| `project-ideas/` | 项目灵感 |
 
 ---
 
