@@ -6,49 +6,81 @@
 
 ## Claude Code 插件安装 (必须)
 
-当前电脑安装了以下插件，需要在新电脑上重新安装：
+### 插件市场配置 (必须)
 
-### 已安装的插件列表
-
-| 插件名称 | 版本 | 功能 |
-|----------|------|------|
-| **claude-hud** | 0.0.10 | HUD状态栏显示 |
-| **skill-manager** | 1.0.0 | 技能调度器插件 |
-| **skills-library** | 1.0.0 | 技能库插件 |
-
-### 安装插件
-
-Claude Code 使用 `/plugins` 命令管理插件：
+新电脑首次安装需要先添加插件市场：
 
 ```bash
 # 1. 启动 Claude Code
 claude
 
-# 2. 添加插件市场 (如果需要)
+# 2. 添加插件市场
 /plugins marketplace add claude-hud jarrodwatts/claude-hud
 /plugins marketplace add official anthropics/claude-plugins-official
 
-# 3. 安装 claude-hud (HUD状态栏)
-/plugins install claude-hud
-
-# 4. 安装 skill-manager
-/plugins install skill-manager
-
-# 5. 安装 skills-library
-/plugins install skills-library
-
-# 6. 查看已安装插件
-/plugins list
+# 3. 重新加载插件
+/reload-plugins
 ```
 
-### 插件来源
+### 完整插件列表
 
-| 插件 | GitHub 仓库 |
-|------|-------------|
-| claude-hud | jarrodwatts/claude-hud |
-| skill-manager | (本地安装) |
-| skills-library | (本地安装) |
-| 官方插件 | anthropics/claude-plugins-official |
+| 插件名称 | 版本 | 功能 | 市场 |
+|----------|------|------|------|
+| **claude-hud** | 0.0.10 | HUD状态栏显示 | claude-hud |
+| **skill-manager** | 1.0.0 | 技能调度器插件 | 本地 |
+| **skills-library** | 1.0.0 | 技能库插件 | 本地 |
+| **code-review** | latest | PR代码审查 | official |
+| **frontend-design** | latest | 前端设计 | official |
+| **superpowers** | 5.0.5 | 开发者超能力 | official |
+| **github** | latest | GitHub集成 | official |
+| **commit-commands** | latest | 提交命令 | official |
+| **ralph-loop** | latest | 开发循环 | official |
+| **figma** | 1.2.0 | Figma集成 | official |
+| **skill-creator** | latest | 技能创建器 | official |
+| **csharp-lsp** | 1.0.0 | C#语言服务 | official |
+
+### 安装命令
+
+```bash
+# 一键安装所有插件
+/plugins install claude-hud
+/plugins install code-review
+/plugins install frontend-design
+/plugins install superpowers
+/plugins install github
+/plugins install commit-commands
+/plugins install ralph-loop
+/plugins install figma
+/plugins install skill-creator
+/plugins install csharp-lsp
+
+# 查看已安装插件
+/plugins list
+
+# 重新加载插件
+/reload-plugins
+```
+
+### 本地插件安装 (skill-manager, skills-library)
+
+这两个是自定义插件，需要手动复制：
+
+```bash
+# 1. 从仓库克隆
+git clone https://github.com/ShiinsMashiro/Assistants.git ~/Assistants
+
+# 2. 复制到插件目录
+# Windows:
+xcopy /E /I "~/Assistants/custom-plugins/skill-manager" "C:\Users\用户名\.claude\plugins\skill-manager"
+xcopy /E /I "~/Assistants/custom-plugins/skills-library" "C:\Users\用户名\.claude\plugins\skills-library"
+
+# Mac/Linux:
+cp -r ~/Assistants/custom-plugins/skill-manager ~/.claude/plugins/
+cp -r ~/Assistants/custom-plugins/skills-library ~/.claude/plugins/
+
+# 3. 重新加载
+/reload-plugins
+```
 
 ### 插件配置
 
